@@ -14,6 +14,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class SecActivity : AppCompatActivity() {
+
+    companion object {
+        const val EXTRA_DRINK = "drink"
+        const val EXTRA_SUGAR = "sugar"
+        const val EXTRA_ICE = "ice"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,25 +39,32 @@ class SecActivity : AppCompatActivity() {
         // Step7：設定 btnSend 的點擊事件
         btnSend.setOnClickListener {
             // Step8：如果 edDrink 為空，則顯示提示文字
-            if (edDrink.text.isEmpty()) {
+            if (drinkName.isBlank()) {
                 Toast.makeText(this, "請輸入飲料名稱", Toast.LENGTH_SHORT).show()
             } else {
-                // Step9：宣告 Bundle，並將飲料名稱、甜度、冰塊的值放入 Bundle 中
-                val b = bundleOf(
-                    "drink" to edDrink.text.toString(),
-                    "sugar" to rgSugar.findViewById<RadioButton>(
-                        rgSugar.checkedRadioButtonId
-                    ).text.toString(),
-                    "ice" to rgIce.findViewById<RadioButton>(
-                        rgIce.checkedRadioButtonId
-                    ).text.toString()
-                )
-                // Step10：宣告 Intent，並將 Bundle 放入 Intent 中
-                val i = Intent().putExtras(b)
-                // Step11：設定 Activity 的結果，並關閉 Activity
-                setResult(RESULT_OK, i)
+                val sugar = rgSugar.getSelectedText()
+                val ice = rgIce.getSelectedText()
+
+                // 使用 apply 作用域函式來設定 Intent
+                val resultIntent = Intent().apply {
+                    putExtra(EXTRA_DRINK, drinkName)
+                    putExtra(EXTRA_SUGAR, sugar)
+                    putExtra(EXTRA_ICE, ice)
+                }
+                
+                // 設定結果並關閉此 Activity
+                setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }
+        }
+    }
+
+    private fun RadioGroup.getSelectedText(): String {
+        val selectedId = this.checkedRadioButtonId
+        return if (selectedId != -1) {
+            findViewById<RadioButton>(selectedId).text.toString()
+        } else {
+            "未選擇" // 提供一個預設值以避免崩潰
         }
     }
 }

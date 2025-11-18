@@ -23,9 +23,9 @@ class MainActivity : AppCompatActivity() {
         if (result.resultCode == Activity.RESULT_OK) {
             // Step13：取得回傳的 Intent，並從 Intent 中取得飲料名稱、甜度、冰塊的值
             val intent = result.data
-            val drink = intent?.getStringExtra("drink")
-            val sugar = intent?.getStringExtra("sugar")
-            val ice = intent?.getStringExtra("ice")
+            val drink = data?.getStringExtra(SecActivity.EXTRA_DRINK) ?: "未提供"
+            val sugar = data?.getStringExtra(SecActivity.EXTRA_SUGAR) ?: "未提供"
+            val ice = data?.getStringExtra(SecActivity.EXTRA_ICE) ?: "未提供"
             // Step14：設定 tvMeal 的文字
             val tvMeal = findViewById<TextView>(R.id.tvMeal)
             tvMeal.text = "飲料：$drink\n\n甜度：$sugar\n\n冰塊：$ice"

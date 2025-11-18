@@ -12,18 +12,16 @@ class ViewPagerAdapter(
     lifecycle: Lifecycle
 ) : FragmentStateAdapter(fm, lifecycle) {
 
+    // 將要顯示的 Fragment 儲存在一個列表中
+    private val fragments: List<Fragment> = listOf(
+        FirstFragment(),
+        SecondFragment(),
+        ThirdFragment()
+    )
+
     // 回傳 Fragment 的數量
-    override fun getItemCount(): Int = 3
+    override fun getItemCount(): Int = fragments.size
 
     // 根據 position 位置回傳對應的 Fragment
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            // 第一頁 Fragment
-            0 -> FirstFragment()
-            // 第二頁 Fragment
-            1 -> SecondFragment()
-            // 第三頁 Fragment
-            else -> ThirdFragment()
-        }
-    }
+    override fun createFragment(position: Int): Fragment = fragments[position]
 }
